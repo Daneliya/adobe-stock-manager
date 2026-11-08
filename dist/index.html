@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adobe Stock 素材库</title>
+<style>
+:root{color-scheme:light;font-family:system-ui,-apple-system,sans-serif;color:#222039;background:#f6f5fa;--line:#e5e1ef;--accent:#6041c6;--muted:#625d76}
+*{box-sizing:border-box}body{margin:0}h1,h2,p{margin:0}
+header{position:relative;overflow:hidden;background:radial-gradient(ellipse at 90% 0,#6845a4,transparent 58%),linear-gradient(125deg,#201738,#34235e);color:white;padding:45px max(24px,calc((100vw - 1160px)/2)) 78px}
+header::after{content:"";position:absolute;pointer-events:none;width:340px;height:340px;right:5%;top:-115px;transform:rotate(-22deg);border:1px solid #ffffff35;border-radius:72px;box-shadow:0 0 0 30px #ffffff0a,0 0 0 60px #ffffff0a}
+.eyebrow{display:inline-block;font-size:11px;letter-spacing:.19em;font-weight:750;color:#e1d5ff;background:#ffffff16;border:1px solid #ffffff28;border-radius:40px;padding:7px 12px}
+h1{margin:13px 0 8px;font-size:clamp(30px,5vw,50px);letter-spacing:-.035em}header p{color:#ded1f6}
+main{position:relative;max-width:1208px;margin:-34px auto 0;padding:0 24px 38px}
+.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:24px}
+.metric{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:14px 17px;box-shadow:0 4px 20px #3324590b}
+.metric strong{font-size:26px;line-height:1.12;font-variant-numeric:tabular-nums}.metric span{font-size:12px;color:var(--muted)}
+.metric[aria-pressed=true]{border-color:#b19cf0;background:#f4eeff;color:#482ba0}
+.bar,.actions,.filters,.section-heading,.preview-head{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.bar{justify-content:space-between;background:white;border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:24px}
+button,input,select,textarea{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:white;color:inherit}
+button{cursor:pointer;transition:background .18s,border-color .18s,box-shadow .18s}button:hover:not(:disabled){background:#f1ebfc;border-color:#c9b9ec}
+button:disabled{opacity:.52;cursor:not-allowed}.primary{background:var(--accent);border-color:var(--accent);color:white}.primary:hover:not(:disabled){background:#4d2dad;color:white}
+:focus-visible{outline:3px solid #8b6ae0;outline-offset:2px}
+.filters{flex:1 1 320px;min-width:0;justify-content:flex-end}
+.filters input{flex:1 1 205px;min-width:0;max-width:100%;background:#faf8fe}
+.status-picker{position:relative;flex:none}
+.status-picker summary{list-style:none;cursor:pointer;padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:white;display:flex;align-items:center;gap:9px}
+.status-picker summary::-webkit-details-marker{display:none}
+.status-picker summary::after{content:"⌄";color:var(--accent)}
+.status-picker[open] summary{background:#f1ebfc;border-color:#c9b9ec}
+.status-options{position:absolute;right:0;top:calc(100% + 7px);z-index:2;display:grid;gap:3px;padding:6px;width:156px;background:white;border:1px solid var(--line);border-radius:13px;box-shadow:0 12px 32px #33245930}
+.status-options button{display:flex;align-items:center;justify-content:space-between;border:0;text-align:left}
+.status-options button[aria-pressed=true]{background:#f1ebfc;color:#482ba0;font-weight:650}
+.status-options button[aria-pressed=true]::after{content:"✓"}
+.date-field{display:grid;gap:5px;margin:10px 0}
+.date-trigger{display:flex;align-items:center;justify-content:space-between;background:#faf8fe;text-align:left}
+.date-trigger::after{content:"▦";color:var(--accent);font-size:18px}
+.calendar{width:min(390px,94vw)}
+.calendar-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.calendar-heading button{min-width:40px}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center}
+.calendar-grid small{padding:4px 0}.calendar-grid button{min-width:0;padding:7px 0;border-color:transparent}
+.calendar-grid [aria-current=date]{border-color:#b19cf0}
+.calendar-grid [aria-pressed=true]{background:var(--accent);color:white;font-weight:700}
+.calendar-footer{display:flex;justify-content:space-between;gap:8px;margin-top:13px}
+#importer p{margin-top:8px}
+.muted,small{color:var(--muted)}
+.gallery-layout{display:grid;grid-template-columns:208px minmax(0,1fr);align-items:start;gap:18px}
+.timeline{position:sticky;top:14px;background:white;border:1px solid var(--line);border-radius:16px;padding:12px}
+.timeline h2{font-size:15px;margin:2px 4px 10px}
+.timeline-tree{max-height:min(61vh,540px);overflow:auto;padding:3px}
+.timeline summary,.date-filter{font-size:13px;line-height:1.4;padding:7px 9px;border-radius:8px;overflow-wrap:anywhere}
+.timeline summary{cursor:pointer;color:#3a3054;font-weight:650}
+.timeline summary:hover{background:#f3eefb}
+.timeline-count{float:right;color:var(--muted);font-weight:400;font-variant-numeric:tabular-nums}
+.timeline-branch{margin-left:11px;padding-left:7px;border-left:1px solid var(--line)}
+.date-filter{display:block;width:100%;text-align:left;border-color:transparent;margin:1px 0}
+.date-filter[aria-pressed=true]{background:#f1ebfc;border-color:#d8c9f5;color:#482ba0;font-weight:650}
+.timeline-empty{padding:8px 9px;font-size:12px}
+@media(max-width:720px){.gallery-layout{grid-template-columns:minmax(0,1fr)}.timeline{position:static}.timeline-tree{max-height:220px}}
+.section-heading{justify-content:space-between;margin-bottom:12px}.section-heading h2{font-size:20px}.section-heading p{font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,285px),1fr));gap:17px}
+article{display:flex;flex-direction:column;background:white;border:1px solid var(--line);border-radius:17px;overflow:hidden;box-shadow:0 3px 14px #33245908;transition:transform .2s,box-shadow .2s,border-color .2s}
+article:hover,article:focus-within{transform:translateY(-4px);box-shadow:0 13px 28px #3324591b;border-color:#cbbbed}
+.image-button{width:100%;display:block;position:relative;padding:0;border:0;border-radius:0;overflow:hidden;background:#e9e4f2}
+.thumb{width:100%;aspect-ratio:16/10;object-fit:contain;display:block;transition:transform .25s}.image-button:hover .thumb,.image-button:focus-visible .thumb{transform:scale(1.035)}
+.zoom-label{position:absolute;right:10px;bottom:10px;padding:5px 9px;background:#211634dd;color:white;border-radius:8px;font-size:12px;transition:background .2s}.image-button:hover .zoom-label{background:#6041c6}
+.details{display:flex;flex-direction:column;flex:1;padding:15px;overflow-wrap:anywhere}.details h2{font-size:17px;margin:9px 0 6px}.details p{margin:0 0 7px;font-size:13px}
+.badge{align-self:flex-start;background:#eeeaf6;color:#51466b;padding:4px 9px;border-radius:20px;font-size:12px;font-weight:650}
+.badge[data-status="待投稿"]{background:#efe7ff;color:#512cab}.badge[data-status="审核中"]{background:#fff2d8;color:#795000}.badge[data-status="已通过"]{background:#e0f5e9;color:#12603d}.badge[data-status="需修改"]{background:#ffe8ed;color:#8d2c43}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0}.chips span{background:#f2eef8;color:#50436d;padding:4px 7px;border-radius:6px;font-size:12px}
+.card-actions{margin-top:auto;padding-top:10px;border-top:1px solid var(--line)}.card-actions button{font-size:12px;padding:6px 8px}
+.empty{grid-column:1/-1;padding:48px 20px;border:1px dashed #c5b8df;border-radius:16px;text-align:center;background:#ffffff83;color:var(--muted);display:grid;justify-items:center;gap:10px}.empty strong{font-size:19px;color:#34284f}
+.storage{margin-top:18px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#eeebf6}
+dialog{border:1px solid var(--line);border-radius:16px;width:min(560px,94vw);max-height:90vh;padding:20px;color:inherit;box-shadow:0 24px 70px #16102250}dialog::backdrop{background:#1c1339b8}
+form label{display:grid;gap:5px;margin:10px 0}textarea{resize:vertical;min-height:70px}
+.preview{width:min(980px,94vw)}.preview-head{justify-content:space-between;flex-wrap:nowrap;margin-bottom:12px}.preview-head h2{font-size:17px;overflow-wrap:anywhere}
+.preview img{display:block;width:100%;max-height:72vh;object-fit:contain;background:#20182e;border-radius:10px}
+#message{margin:0 0 12px;color:#482ba0;font-size:14px}#message:empty{margin:0}.danger{color:#a42345}
+@media(max-width:600px){header{padding-top:30px}main{padding-inline:14px}.summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.filters{width:100%}.filters input{flex-basis:150px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}article:hover,article:focus-within,.image-button:hover .thumb,.image-button:focus-visible .thumb{transform:none}}
+</style>
+</head>
+<body>
+<header><span class="eyebrow">STOCK WORKSPACE</span><h1>Adobe Stock 素材库</h1><p>整理图片、投稿标题、关键字和审核进度</p></header>
+<main>
+<div class="summary" aria-label="按状态查看素材">
+  <button class="metric" data-filter="全部状态"><strong>0</strong><span>全部素材</span></button>
+  <button class="metric" data-filter="待投稿"><strong>0</strong><span>待投稿</span></button>
+  <button class="metric" data-filter="审核中"><strong>0</strong><span>审核中</span></button>
+  <button class="metric" data-filter="已通过"><strong>0</strong><span>已通过</span></button>
+</div>
+<div class="bar">
+  <div class="actions"><button id="connect">连接本地文件夹</button><button id="migrate" hidden>迁移浏览器素材</button><button class="primary" id="add" disabled>＋ 导入图片</button><button id="export">导出备份</button><button id="restore" disabled>导入备份</button></div>
+  <div class="filters">
+    <input id="search" type="search" aria-label="搜索标题、关键字、分类或日期" placeholder="搜索素材…">
+    <details id="status-picker" class="status-picker"><summary id="filter-label">全部状态</summary><div id="status-options" class="status-options" aria-label="投稿状态筛选"></div></details>
+  </div>
+</div>
+<input type="file" id="files" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" multiple hidden>
+<input type="file" id="backup" accept=".json,application/json" hidden>
+<div class="gallery-layout">
+<nav class="timeline" aria-labelledby="timeline-title">
+  <h2 id="timeline-title">日期线</h2>
+  <div class="timeline-tree" id="timeline-tree"></div>
+</nav>
+<div>
+<div class="section-heading"><h2>素材图库</h2><p class="muted" id="count"></p></div><p id="message" role="status"></p>
+<section id="grid" class="grid" aria-label="素材列表"></section>
+</div>
+</div>
+<p class="storage"><small id="storage">连接文件夹后即可保存。请选择 index.html 所在的 dist 文件夹。连接前可以查看和备份浏览器旧素材。</small></p>
+</main>
+<dialog id="preview" class="preview" aria-labelledby="preview-title">
+<div class="preview-head"><h2 id="preview-title"></h2><button id="close-preview" autofocus>关闭</button></div>
+<img id="preview-image" alt="">
+</dialog>
+<dialog id="calendar" class="calendar" aria-labelledby="calendar-month">
+<div class="calendar-heading"><button id="previous-month" aria-label="上个月">‹</button><h2 id="calendar-month" aria-live="polite"></h2><button id="next-month" aria-label="下个月">›</button></div>
+<div id="calendar-grid" class="calendar-grid"></div>
+<div class="calendar-footer"><button id="calendar-today">今天</button><button id="calendar-close">取消</button></div>
+</dialog>
+<dialog id="importer" aria-labelledby="import-title">
+<form id="import-form">
+<h2 id="import-title">新建素材</h2><p id="import-count" class="muted"></p>
+<div class="date-field"><span id="import-date-label">素材日期</span><button type="button" class="date-trigger" id="import-date" aria-labelledby="import-date-label import-date" aria-haspopup="dialog"></button></div>
+<div class="actions"><button type="submit" class="primary">确认导入</button><button type="button" id="cancel-import">取消</button></div>
+</form>
+</dialog>
+<dialog id="editor">
+<form id="form">
+<h2>编辑素材</h2>
+<label>图片文件标题<input name="fileTitle" required></label>
+<label>Adobe Stock 投稿标题<input name="title" maxlength="70" placeholder="可稍后填写"></label>
+<div class="date-field"><span id="edit-date-label">素材日期</span><input name="assetDate" type="hidden"><button type="button" class="date-trigger" id="edit-date" aria-labelledby="edit-date-label edit-date" aria-haspopup="dialog"></button></div>
+<label>关键字<textarea name="keywords" placeholder="用逗号分隔，重要词放在前面"></textarea></label>
+<label>分类<input name="category" placeholder="例如：餐饮冷链"></label>
+<label>投稿状态<select name="status"></select></label>
+<label>备注<textarea name="notes" placeholder="记录拒稿原因、修改事项等"></textarea></label>
+<label style="display:flex"><input name="ai" type="checkbox"> 使用生成式 AI</label>
+<div class="actions"><button type="submit" class="primary">保存</button><button type="button" id="cancel">取消</button></div>
+</form>
+</dialog>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const statuses = ['待整理', '待投稿', '审核中', '已通过', '需修改'];
+const extensions = {'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/avif':'avif','image/gif':'gif'};
+const supported = new Set(Object.keys(extensions));
+const grid = $('grid');
+const form = $('form');
+let database, disk, records = [], editingId, busy = false;
+const previewUrls = [];
+const metrics = document.querySelectorAll('.metric');
+const preview = $('preview');
+const previewImage = $('preview-image');
+let fullImageUrl;
+let statusFilter = '全部状态';
+let dateFilter = '';
+for (const metric of metrics) {
+  metric.onclick = () => setFilter(metric.dataset.filter);
+}
+$('close-preview').onclick = () => preview.close();
+preview.addEventListener('close', () => {
+  previewImage.removeAttribute('src');
+  URL.revokeObjectURL(fullImageUrl);
+});
+function openPreview(row) {
+  fullImageUrl = URL.createObjectURL(row.image);
+  previewImage.src = fullImageUrl;
+  previewImage.alt = row.fileTitle;
+  $('preview-title').textContent = row.fileTitle;
+  preview.showModal();
+}
+const report = message => { $('message').textContent = message; };
+function element(tag, value, css) {
+  const node = document.createElement(tag);
+  if (value != null) node.textContent = value;
+  if (css) node.className = css;
+  return node;
+}
+function optionList(select, values) {
+  for (const value of values) select.add(new Option(value, value));
+}
+const statusPicker = $('status-picker');
+const statusOptions = ['全部状态', ...statuses].map(value => {
+  const button = action(null, () => {
+    setFilter(value);
+    $('filter-label').focus();
+  });
+  const badge = element('span', value, 'badge');
+  badge.dataset.status = value;
+  button.append(badge);
+  $('status-options').append(button);
+  return {button,value};
+});
+function setFilter(value) {
+  statusFilter = value;
+  statusPicker.open = false;
+  render();
+}
+document.addEventListener('click', event => {
+  if (!statusPicker.contains(event.target)) statusPicker.open = false;
+});
+statusPicker.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && statusPicker.open) {
+    statusPicker.open = false;
+    $('filter-label').focus();
+  }
+});
+optionList(form.elements.status, statuses);
+function openDatabase() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('adobe-stock-manager', 1);
+    request.onupgradeneeded = () => request.result.createObjectStore('images', {keyPath:'id'});
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+function transaction(mode, work) {
+  return new Promise((resolve, reject) => {
+    const tx = database.transaction('images', mode);
+    let request;
+    tx.oncomplete = () => resolve(request?.result);
+    tx.onabort = () => reject(tx.error || new Error('保存已取消'));
+    try {
+      request = work(tx.objectStore('images'));
+    } catch (error) {
+      tx.abort();
+      reject(error);
+    }
+  });
+}
+async function browserRecords() {
+  return (await transaction('readonly', store => store.getAll())).map(withDefaults);
+}
+function showRecords(rows) {
+  records = rows.sort((a,b) => b.updated - a.updated);
+  rebuildTimeline();
+  render();
+}
+async function refresh() {
+  const rows = await browserRecords();
+  if (!disk) showRecords(rows);
+}
+async function metadataText(folder) {
+  try {
+    const handle = await folder.getFileHandle('metadata.json');
+    return await (await handle.getFile()).text();
+  } catch (error) {
+    if (error.name === 'NotFoundError') return null;
+    throw error;
+  }
+}
+async function writeFile(folder, name, data) {
+  const handle = await folder.getFileHandle(name, {create:true});
+  const stream = await handle.createWritable();
+  try {
+    await stream.write(data);
+    await stream.close();
+  } catch (error) {
+    await stream.abort().catch(() => {});
+    throw error;
+  }
+}
+function diskName(row) {
+  return row.id + '.' + extensions[row.image.type];
+}
+async function saveDisk(rows) {
+  const save = async () => {
+    if (await metadataText(disk.folder) !== disk.text) {
+      throw new Error('metadata.json 已在别处更改，请重新连接文件夹后再试');
+    }
+    const previous = new Set(records.map(row => row.id));
+    for (const row of rows) {
+      if (!previous.has(row.id)) await writeFile(disk.images, diskName(row), row.image);
+    }
+    const images = rows.map(({image,...fields}) => ({...fields, path:'images/' + diskName({id:fields.id, image})}));
+    const text = JSON.stringify({version:1, images}, null, 2) + '\n';
+    await writeFile(disk.folder, 'metadata.json', text);
+    disk.text = text;
+    showRecords(rows);
+  };
+  if (navigator.locks) await navigator.locks.request('adobe-stock-disk-write', save);
+  else await save();
+}
+async function addRecords(rows) {
+  if (!rows.length) return;
+  if (!disk) throw new Error('请先连接本地文件夹');
+  await saveDisk([...records, ...rows]);
+}
+function validFields(item) {
+  return item && typeof item.id === 'string' && /^[a-f0-9]{32}$/.test(item.id) &&
+    ['title','filename','keywords','category','notes'].every(key => typeof item[key] === 'string') &&
+    (item.fileTitle === undefined || (typeof item.fileTitle === 'string' && item.fileTitle.trim())) &&
+    (item.assetDate === undefined || (typeof item.assetDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(item.assetDate))) &&
+    statuses.includes(item.status) && typeof item.ai === 'boolean' && Number.isFinite(item.updated);
+}
+$('connect').onclick = () => run(async () => {
+  if (!window.showDirectoryPicker) {
+    report('当前浏览器不支持文件夹写入。请用桌面版 Chrome 或 Edge 打开同一个 HTML。旧素材可用 JSON 备份迁移。');
+    return;
+  }
+  const parent = await window.showDirectoryPicker({mode:'readwrite', id:'adobe-stock-project'});
+  await parent.getFileHandle('index.html').catch(error => {
+    if (error.name === 'NotFoundError') throw new Error('请选择 index.html 所在的 dist 文件夹');
+    throw error;
+  });
+  const folder = await parent.getDirectoryHandle('stock-data', {create:true});
+  const images = await folder.getDirectoryHandle('images', {create:true});
+  let text = await metadataText(folder);
+  if (text === null) {
+    const initialize = async () => {
+      text = await metadataText(folder);
+      if (text !== null) return;
+      await writeFile(folder, 'metadata.json', '{"version":1,"images":[]}');
+      text = await metadataText(folder);
+    };
+    if (navigator.locks) await navigator.locks.request('adobe-stock-disk-write', initialize);
+    else await initialize();
+  }
+  const manifest = JSON.parse(text);
+  if (manifest?.version !== 1 || !Array.isArray(manifest.images)) throw new Error('metadata.json 格式不正确');
+  const rows = [];
+  const seen = new Set();
+  for (const item of manifest.images) {
+    if (!validFields(item) || seen.has(item.id)) {
+      throw new Error('metadata.json 中存在无效或重复记录');
+    }
+    const type = [...supported].find(mime => item.path === 'images/' + item.id + '.' + extensions[mime]);
+    if (!type) {
+      throw new Error('metadata.json 中存在无效的图片路径');
+    }
+    const name = diskName({id:item.id, image:{type}});
+    let image;
+    try {
+      image = await (await images.getFileHandle(name)).getFile();
+    } catch (error) {
+      if (error.name !== 'NotFoundError') throw error;
+      throw new Error('找不到图片 images/' + name + '，请从备份恢复该文件后重新连接');
+    }
+    if (!Number.isSafeInteger(item.width) || item.width <= 0 || !Number.isSafeInteger(item.height) || item.height <= 0) {
+      throw new Error('metadata.json 中存在无效或重复记录');
+    }
+    const {path,...fields} = item;
+    rows.push(withDefaults({...fields, image:image.slice(0, image.size, type)}));
+    seen.add(item.id);
+  }
+  disk = {folder, images, text};
+  $('migrate').hidden = !database;
+  $('storage').textContent = '当前保存到 ' + parent.name + '/stock-data。图片在 images 中，素材信息在 metadata.json。请一起备份。';
+  for (const name of ['add','export','restore']) $(name).disabled = false;
+  showRecords(rows);
+  report('已连接本地素材文件夹。');
+});
+$('migrate').onclick = () => run(async () => {
+  if (!disk || !database) return;
+  const existing = new Set(records.map(row => row.id));
+  const rows = (await browserRecords()).filter(row => !existing.has(row.id));
+  await addRecords(rows);
+  report('已复制 ' + rows.length + ' 张浏览器素材到文件夹。浏览器里的原记录仍可用于恢复。');
+});
+function localDate(timestamp) {
+  const date = new Date(timestamp);
+  const twoDigits = value => String(value).padStart(2, '0');
+  return [date.getFullYear(), twoDigits(date.getMonth() + 1), twoDigits(date.getDate())].join('-');
+}
+const calendar = $('calendar');
+let calendarMonth, selectedDate, onDateSelected;
+function showCalendar(value, onSelect) {
+  selectedDate = value;
+  const [year, month] = value.split('-').map(Number);
+  calendarMonth = new Date(year, month - 1, 1);
+  onDateSelected = onSelect;
+  renderCalendar();
+  calendar.showModal();
+  (calendar.querySelector('[aria-pressed=true]') || $('next-month')).focus();
+}
+function chooseDate(value) {
+  onDateSelected(value);
+  calendar.close();
+}
+function renderCalendar() {
+  const year = calendarMonth.getFullYear();
+  const month = calendarMonth.getMonth();
+  $('calendar-month').textContent = year + ' 年 ' + (month + 1) + ' 月';
+  const days = $('calendar-grid');
+  days.replaceChildren();
+  for (const label of ['一','二','三','四','五','六','日']) days.append(element('small', label));
+  for (let i = 0; i < (calendarMonth.getDay() + 6) % 7; i++) days.append(element('span'));
+  const today = localDate(Date.now());
+  for (let day = 1; day <= new Date(year, month + 1, 0).getDate(); day++) {
+    const value = localDate(new Date(year, month, day));
+    const button = action(day, () => chooseDate(value));
+    button.setAttribute('aria-label', value);
+    button.setAttribute('aria-pressed', String(value === selectedDate));
+    if (value === today) button.setAttribute('aria-current', 'date');
+    days.append(button);
+  }
+}
+function shiftMonth(offset) {
+  calendarMonth.setMonth(calendarMonth.getMonth() + offset);
+  renderCalendar();
+}
+$('previous-month').onclick = () => shiftMonth(-1);
+$('next-month').onclick = () => shiftMonth(1);
+$('calendar-today').onclick = () => chooseDate(localDate(Date.now()));
+$('calendar-close').onclick = () => calendar.close();
+$('edit-date').onclick = () => showCalendar(form.elements.assetDate.value, value => {
+  form.elements.assetDate.value = value;
+  $('edit-date').textContent = value;
+});
+function withDefaults(row) {
+  return {...row, fileTitle: row.fileTitle ?? row.filename,
+    assetDate: row.assetDate ?? localDate(row.updated)};
+}
+function tags(value) {
+  return [...new Set(value.split(/[,，\n]/).map(word => word.trim()).filter(Boolean))];
+}
+function action(label, handler, css) {
+  const button = element('button', label, css);
+  button.type = 'button';
+  button.onclick = handler;
+  return button;
+}
+function dateLabel(value) {
+  const [year, month, day] = value.split('-');
+  return year + ' 年' + (month ? ' ' + Number(month) + ' 月' : '') +
+    (day ? ' ' + Number(day) + ' 日' : '');
+}
+function rebuildTimeline() {
+  const tree = $('timeline-tree');
+  const expanded = new Set(Array.from(tree.querySelectorAll('details[open]'), node => node.dataset.period));
+  const counts = new Map();
+  for (const row of records) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(row.assetDate)) continue;
+    for (const length of [4, 7, 10]) {
+      const period = row.assetDate.slice(0, length);
+      counts.set(period, (counts.get(period) || 0) + 1);
+    }
+  }
+  if (dateFilter && !counts.has(dateFilter)) dateFilter = '';
+  tree.replaceChildren();
+  const button = (period, label, count) => {
+    const control = action(label, () => {
+      dateFilter = period;
+      render();
+    }, 'date-filter');
+    control.dataset.period = period;
+    control.append(element('span', count, 'timeline-count'));
+    return control;
+  };
+  tree.append(button('', '全部日期', records.length));
+  if (!counts.size) tree.append(element('p', '导入素材后按日期归档', 'muted timeline-empty'));
+
+  const branches = new Map();
+  for (const period of [...counts.keys()].sort().reverse().sort((a,b) => a.length - b.length)) {
+    const parent = branches.get(period.slice(0, -3)) || tree;
+    const count = counts.get(period);
+    if (period.length === 10) {
+      parent.append(button(period, Number(period.slice(-2)) + ' 日', count));
+      continue;
+    }
+    const branch = element('details');
+    branch.dataset.period = period;
+    branch.open = expanded.has(period) || Boolean(dateFilter && dateFilter.startsWith(period));
+    const summary = element('summary', period.length === 4 ? dateLabel(period) : Number(period.slice(-2)) + ' 月');
+    summary.append(element('span', count, 'timeline-count'));
+    const children = element('div', null, 'timeline-branch');
+    children.append(button(period, period.length === 4 ? '查看全年' : '查看整月', count));
+    branch.append(summary, children);
+    parent.append(branch);
+    branches.set(period, children);
+  }
+}
+function render() {
+  for (const url of previewUrls.splice(0)) URL.revokeObjectURL(url);
+  grid.replaceChildren();
+  const query = $('search').value.trim().toLowerCase();
+  const status = statusFilter;
+  for (const button of $('timeline-tree').querySelectorAll('.date-filter')) {
+    button.setAttribute('aria-pressed', String(button.dataset.period === dateFilter));
+  }
+  $('filter-label').textContent = status;
+  for (const {button,value} of statusOptions) button.setAttribute('aria-pressed', String(value === status));
+  for (const metric of metrics) {
+    const value = metric.dataset.filter;
+    metric.querySelector('strong').textContent = value === '全部状态' ? records.length :
+      records.filter(row => row.status === value).length;
+    metric.setAttribute('aria-pressed', String(status === value));
+  }
+  const visible = records.filter(row =>
+    (status === '全部状态' || row.status === status) &&
+    (!dateFilter || row.assetDate.startsWith(dateFilter)) &&
+    [row.fileTitle,row.title,row.assetDate,row.category,row.keywords,row.filename,row.notes].join(' ').toLowerCase().includes(query)
+  );
+  $('count').textContent = (dateFilter ? dateLabel(dateFilter) + ' · ' : '') +
+    '显示 ' + visible.length + ' / ' + records.length + ' 张';
+  if (!visible.length) {
+    const empty = element('div', null, 'empty');
+    empty.append(element('strong', records.length ? '没有匹配的素材' : '图库还没有素材'));
+    if (records.length || query || dateFilter || status !== '全部状态') {
+      empty.append(action('清除筛选', () => {
+        $('search').value = '';
+        dateFilter = '';
+        setFilter('全部状态');
+      }));
+    } else {
+      empty.append(element('p', disk ? '导入原图，开始整理第一批素材。' : '连接 HTML 所在文件夹，即可在本地保存图片。'));
+      empty.append(action(disk ? '导入图片' : '连接文件夹',
+        () => $(disk ? 'add' : 'connect').click(), 'primary'));
+    }
+    grid.append(empty);
+    return;
+  }
+  for (const row of visible) {
+    const card = element('article');
+    const img = element('img', null, 'thumb');
+    img.alt = row.fileTitle;
+    img.loading = 'lazy';
+    img.src = URL.createObjectURL(row.image);
+    previewUrls.push(img.src);
+    const imageButton = action(null, () => openPreview(row), 'image-button');
+    imageButton.setAttribute('aria-label', '查看大图：' + row.fileTitle);
+    imageButton.append(img, element('span', '查看大图', 'zoom-label'));
+    const badge = element('span', row.status, 'badge');
+    badge.dataset.status = row.status;
+    const body = element('div', null, 'details');
+    const chips = element('div', null, 'chips');
+    for (const tag of tags(row.keywords)) chips.append(element('span', tag));
+    body.append(badge, element('h2', row.fileTitle),
+      element('p', 'Adobe Stock 投稿标题：' + (row.title || '未填写')),
+      element('p', '素材日期：' + row.assetDate, 'muted'),
+      element('small', [row.category || '未分类', row.width + ' × ' + row.height,
+        (row.image.size / 1000000).toFixed(2) + ' MB', row.ai ? '生成式 AI' : ''].filter(Boolean).join(' · ')),
+      chips);
+    if (row.notes) body.append(element('p', row.notes, 'muted'));
+    const controls = element('div', null, 'actions card-actions');
+    if (disk) controls.append(action('编辑', () => edit(row)));
+    controls.append(action('复制投稿标题', () => copy(row.title)),
+      action('复制关键字', () => copy(row.keywords)),
+      action('下载', () => download(row.image, row.filename)));
+    if (disk) controls.append(action('删除', () => run(async () => {
+        if (!confirm('删除「' + row.fileTitle + '」？')) return;
+        await saveDisk(records.filter(item => item.id !== row.id));
+        try { await disk.images.removeEntry(diskName(row)); }
+        catch (error) {
+          if (error.name !== 'NotFoundError') {
+            report('素材记录已删除，但磁盘图片仍在 images/' + diskName(row));
+            return;
+          }
+        }
+        report('素材已删除。');
+      }), 'danger'));
+    body.append(controls);
+    card.append(imageButton,body);
+    grid.append(card);
+  }
+}
+async function copy(value) {
+  if (!value) { report('该字段为空。'); return; }
+  try {
+    await navigator.clipboard.writeText(value);
+    report('已复制。');
+  } catch {
+    window.prompt('复制下方内容', value);
+  }
+}
+function download(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = element('a');
+  link.href = url;
+  link.download = filename;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 30000);
+}
+async function run(work) {
+  if (busy) return;
+  busy = true;
+  report('');
+  try { await work(); }
+  catch (error) { if (error.name !== 'AbortError') report('操作失败：' + error.message); }
+  finally { busy = false; }
+}
+function id() {
+  return Array.from(crypto.getRandomValues(new Uint8Array(16)), n => n.toString(16).padStart(2,'0')).join('');
+}
+async function dimensions(blob) {
+  const url = URL.createObjectURL(blob);
+  const image = new Image();
+  try {
+    image.src = url;
+    await image.decode();
+    return {width:image.naturalWidth, height:image.naturalHeight};
+  } finally { URL.revokeObjectURL(url); }
+}
+function edit(row) {
+  editingId = row.id;
+  for (const key of ['fileTitle','title','assetDate','keywords','category','status','notes']) form.elements[key].value = row[key];
+  $('edit-date').textContent = row.assetDate;
+  form.elements.ai.checked = row.ai;
+  $('editor').showModal();
+}
+$('cancel').onclick = () => $('editor').close();
+form.onsubmit = event => {
+  event.preventDefault();
+  run(async () => {
+    const values = new FormData(form);
+    const title = values.get('title').trim();
+    const fileTitle = values.get('fileTitle').trim();
+    if (!fileTitle) { form.elements.fileTitle.focus(); return; }
+    const row = records.find(item => item.id === editingId);
+    const updated = {...row, fileTitle, title, assetDate:values.get('assetDate'),
+      keywords:tags(values.get('keywords')).join(', '), category:values.get('category').trim(),
+      status:values.get('status'), notes:values.get('notes').trim(), ai:values.has('ai'), updated:Date.now()};
+    await saveDisk(records.map(item => item.id === updated.id ? updated : item));
+    $('editor').close();
+    report('素材信息已保存。');
+  });
+};
+$('add').onclick = () => $('files').click();
+$('restore').onclick = () => $('backup').click();
+$('search').oninput = render;
+const importer = $('importer');
+let importFiles = [], importDate;
+$('files').onchange = event => {
+  importFiles = [...event.target.files];
+  event.target.value = '';
+  if (!importFiles.length) return;
+  importDate = localDate(Date.now());
+  $('import-date').textContent = importDate;
+  $('import-count').textContent = '已选择 ' + importFiles.length + ' 张图片，以下日期会用于本批素材。';
+  importer.showModal();
+};
+$('import-date').onclick = () => showCalendar(importDate, value => {
+  importDate = value;
+  $('import-date').textContent = value;
+});
+$('cancel-import').onclick = () => importer.close();
+importer.addEventListener('close', () => {
+  if (!importer.open) importFiles = [];
+});
+$('import-form').onsubmit = event => {
+  event.preventDefault();
+  const files = importFiles;
+  const date = importDate;
+  importer.close();
+  run(async () => {
+    const rows = [];
+    const failed = [];
+    for (const file of files) {
+      try {
+        if (!supported.has(file.type)) throw new Error('格式不支持');
+        rows.push({id:id(), image:file, filename:file.name, ...await dimensions(file),
+          fileTitle:file.name, title:'', assetDate:date, keywords:'', category:'',
+          status:statuses[0], notes:'', ai:false, updated:Date.now()});
+      } catch { failed.push(file.name); }
+    }
+    await addRecords(rows);
+    report('已导入 ' + rows.length + ' 张。' + (failed.length ? ' 无法读取：' + failed.join('、') : ''));
+  });
+};
+function dataUrl(blob) {
+  return new Promise((resolve,reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
+}
+$('export').onclick = () => run(async () => {
+  const images = [];
+  for (const {image,...fields} of records) images.push({...fields, data:await dataUrl(image)});
+  download(new Blob([JSON.stringify({version:1,images})], {type:'application/json'}),
+    'adobe-stock-backup-' + new Date().toISOString().slice(0,10) + '.json');
+  report('备份已导出，包含图片和全部素材信息。');
+});
+$('backup').onchange = event => {
+  const file = event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  run(async () => {
+    const payload = JSON.parse(await file.text());
+    if (payload?.version !== 1 || !Array.isArray(payload.images)) throw new Error('备份格式不匹配');
+    const rows = [];
+    const known = new Set(records.map(row => row.id));
+    for (const item of payload.images) {
+      if (!validFields(item) || typeof item.data !== 'string') {
+        throw new Error('备份中有无效的素材记录');
+      }
+      if (known.has(item.id)) continue;
+      const match = /^data:(image\/[a-z]+);base64,([A-Za-z0-9+/=]+)$/.exec(item.data);
+      if (!match || !supported.has(match[1])) throw new Error('备份图片格式不支持');
+      const image = new Blob([Uint8Array.from(atob(match[2]), char => char.charCodeAt(0))], {type:match[1]});
+      const {data,...fields} = item;
+      rows.push(withDefaults({...fields, ...await dimensions(image), image}));
+      known.add(item.id);
+    }
+    await addRecords(rows);
+    report('恢复 ' + rows.length + ' 张，跳过 ' + (payload.images.length - rows.length) + ' 张已有记录。');
+  });
+};
+rebuildTimeline();
+render();
+openDatabase().then(db => {
+  database = db;
+  if (disk) $('migrate').hidden = false;
+  return refresh();
+}).catch(error => {
+  if (disk) return;
+  for (const name of ['add','export','restore']) $(name).disabled = true;
+  report('无法打开浏览器素材库：' + error.message + '。仍可尝试连接本地文件夹。');
+});
+</script>
+</body>
+</html>

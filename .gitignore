@@ -1,0 +1,4 @@
+.DS_Store
+.idea/
+/dist/stock-data/
+adobe-stock-backup-*.json
